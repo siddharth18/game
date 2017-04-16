@@ -1,0 +1,15 @@
+* { padding: 0;
+   margin: 0; }
+   canvas { background: #eee;
+     display: block;
+     margin: 15px auto;
+    }
+h1{
+  text-align: center;
+  text-shadow: 2px;
+  font-style: italic;
+  font-family: cursive;
+  font-display: block;
+  font-size: 45px;
+  color: #aaa;
+}
