@@ -20,12 +20,19 @@ var brickOffsetLeft = 30;
 var score = 0;
 var lives = 3;
 var bricks = [];
+var color= 'green';
 for (c = 0; c < brickColumnCount; c++) {
   bricks[c] = [];
   for (r = 0; r < brickRowCount; r++) {
     bricks[c][r] = { x: 0, y: 0, status: 1 };
   }
 }
+
+//alert box at the loading of the page
+window.onload = function(){
+	alert('WELCOME TO PADDLE THE SADDLE\nThe objective is to break all the bricks before losing all your lives. You can control the paddle using the mouse or the left/right keys of the keyboard. Do not let the ball fall down else you lose a life. Press "Spacebar" anywhere between the game to pause');
+
+};
 
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
@@ -53,6 +60,17 @@ function mouseMoveHandler(e) {
   }
 }
 
+//adding event listener for pause
+document.addEventListener('keydown',function(e){
+	switch(e.keyCode)
+	{
+		case 32:
+		 alert('GAME PAUSED\nWANT TO CONTINUE?');
+	}
+}
+,false);
+
+
 function collisionDetection() {
   for (c = 0; c < brickColumnCount; c++) {
     for (r = 0; r < brickRowCount; r++) {
@@ -60,6 +78,7 @@ function collisionDetection() {
       if (b.status == 1) {
         if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
           dy = -dy;
+	  color= 'red';
           b.status = 0;
           score++;
           if (score == brickRowCount * brickColumnCount) {
@@ -72,10 +91,10 @@ function collisionDetection() {
   }
 }
 
-ctx.beginPath();
 function drawBall() {
+  ctx.beginPath();
   ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-  ctx.fillStyle = '#0095DD';
+  ctx.fillStyle = color;
   ctx.fill();
   ctx.closePath();
 }
@@ -83,7 +102,7 @@ function drawBall() {
 function drawPaddle() {
   ctx.beginPath();
   ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-  ctx.fillStyle = '#0095DD';
+  ctx.fillStyle = '#332f2f';
   ctx.fill();
   ctx.closePath();
 }
@@ -96,25 +115,30 @@ function drawBricks() {
         var brickY = (c * (brickHeight + brickPadding)) + brickOffsetTop;
         bricks[c][r].x = brickX;
         bricks[c][r].y = brickY;
+	if((c+r)%2==0){
         ctx.beginPath();
         ctx.rect(brickX, brickY, brickWidth, brickHeight);
         ctx.fillStyle = '#0095DD';
-        ctx.fill();
-        ctx.closePath();
+        ctx.fill();}
+	else{
+	ctx.beginPath();
+        ctx.rect(brickX, brickY, brickWidth, brickHeight);
+        ctx.fillStyle = '#0095AA';
+        ctx.fill();}
       }
     }
   }
 }
 
 function drawScore() {
-  ctx.font = '16px Arial';
-  ctx.fillStyle = '#0095DD';
+  ctx.font = '20px Arial';
+  ctx.fillStyle = 'red';
   ctx.fillText('Score: ' + score, 8, 20);
 }
 
 function drawLives() {
-  ctx.font = '16px Arial';
-  ctx.fillText('Lives: ' + lives, canvas.width - 65, 20);
+  ctx.font = '20px Arial';
+  ctx.fillText('Lives: ' + lives, canvas.width - 75, 20);
 }
 
 function draw() {
@@ -124,17 +148,21 @@ function draw() {
   drawPaddle();
   drawScore();
   drawLives();
+  color= 'green';
   collisionDetection();
   if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+    color='red';
     dx = -dx;
   }
 
   ctx.fillStyle = '#0095DD';
 
   if (y + dy < ballRadius) {
+    color='red';
     dy = -dy;
   } else if (y + dy > canvas.height - ballRadius) {
     if (x > paddleX && x < paddleX + paddleWidth) {
+      color='red';
       dy = -dy;
     } else {
       lives--;
