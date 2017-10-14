@@ -4,12 +4,15 @@
      display: block;
      margin: 15px auto;
     }
+body{
+	background-color: #888;
+}
 h1{
   text-align: center;
   text-shadow: 2px;
-  font-style: italic;
-  font-family: cursive;
+  font-family: Arial;
   font-display: block;
   font-size: 45px;
-  color: #aaa;
+  color: #eee;
+  background-color: #333;
 }
